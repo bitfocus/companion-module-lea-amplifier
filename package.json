@@ -1,0 +1,29 @@
+{
+	"name": "lea-amplifier",
+	"version": "1.0.0",
+	"api_version": "1.0.0",
+	"keywords": [
+		"amplifier",
+		"audio"
+	],
+	"manufacturer": "LEA",
+	"product": [
+		"Amplifier"
+	],
+	"shortname": "lea-amp",
+	"description": "Companion module for LEA Amplifiers",
+	"main": "src/index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "Joseph Adams <josephdadams@gmail.com>",
+	"license": "MIT",
+	"homepage": "https://github.com/bitfocus/companion-module-lea-amplifier#readme",
+	"bugs": {
+		"url": "https://github.com/bitfocus/companion-module-lea-amplifier/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/bitfocus/companion-module-lea-amplifier.git"
+	}
+}

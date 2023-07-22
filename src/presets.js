@@ -1,103 +1,123 @@
+const { combineRgb } = require('@companion-module/base')
+
 module.exports = {
-	setPresets: function () {
+	initPresets: function () {
 		let self = this;
 		let presets = []
 
-		const foregroundColor = self.rgb(255, 255, 255) // White
-		const foregroundColorBlack = self.rgb(0, 0, 0) // Black
-		const backgroundColorRed = self.rgb(255, 0, 0) // Red
-		const backgroundColorGreen = self.rgb(0, 255, 0) // Green
-		const backgroundColorOrange = self.rgb(255, 102, 0) // Orange
+		const foregroundColor = combineRgb(255, 255, 255) // White
+		const foregroundColorBlack = combineRgb(0, 0, 0) // Black
+		const backgroundColorRed = combineRgb(255, 0, 0) // Red
+		const backgroundColorGreen = combineRgb(0, 255, 0) // Green
+		const backgroundColorOrange = combineRgb(255, 102, 0) // Orange
 
 		for (let i = 0; i < self.OUTPUT_CHANNELS.length; i++) {
 			presets.push({
+				type: 'button',
 				category: 'Fader Control',
-				label: `Output Channel ${self.OUTPUT_CHANNELS[i].id} Fader Up`,
-				bank: {
-					style: 'text',
+				name: `Output Channel ${self.OUTPUT_CHANNELS[i].id} Fader Level`,
+				style: {
 					text: `Ch ${self.OUTPUT_CHANNELS[i].id}\\n$(lea-amp:output_${self.OUTPUT_CHANNELS[i].id}_fader)`,
 					size: '14',
 					color: '16777215',
-					bgcolor: self.rgb(0, 0, 0)
-				}
+					bgcolor: combineRgb(0, 0, 0)
+				},
+				steps: [],
+				feedbacks: []
 			})
 
 			presets.push({
+				type: 'button',
 				category: 'Fader Control',
-				label: `Output Channel ${self.OUTPUT_CHANNELS[i].id} Fader Up`,
-				bank: {
-					style: 'text',
+				name: `Output Channel ${self.OUTPUT_CHANNELS[i].id} Fader Up`,
+				style: {
 					text: `${self.OUTPUT_CHANNELS[i].id}\\n+`,
 					size: '14',
 					color: '16777215',
-					bgcolor: self.rgb(0, 0, 0)
+					bgcolor: combineRgb(0, 0, 0)
 				},
-				actions: [
+				steps: [
 					{
-						action: 'setOutputChannelVolumeRelativeValue',
-						options: {
-							channel: self.OUTPUT_CHANNELS[i].id,
-							value: '1.0'
-						}
+						down: [
+							{
+								actionId: 'setOutputChannelVolumeRelativeValue',
+								options: {
+									channel: self.OUTPUT_CHANNELS[i].id,
+									value: '1.0'
+								}
+							}
+						],
+						up: []
 					}
-				]
+				],
+				feedbacks: []
 			})
 
 			presets.push({
+				type: 'button',
 				category: 'Fader Control',
-				label: `Channel ${self.OUTPUT_CHANNELS[i].id} Fader Down`,
-				bank: {
-					style: 'text',
+				name: `Channel ${self.OUTPUT_CHANNELS[i].id} Fader Down`,
+				style: {
 					text: `${self.OUTPUT_CHANNELS[i].id}\\n-`,
 					size: '14',
 					color: '16777215',
-					bgcolor: self.rgb(0, 0, 0)
+					bgcolor: combineRgb(0, 0, 0)
 				},
-				actions: [
+				steps: [
 					{
-						action: 'setOutputChannelVolumeRelativeValue',
-						options: {
-							channel: self.OUTPUT_CHANNELS[i].id,
-							value: '-1.0'
-						}
+						down: [
+							{
+								actionId: 'setOutputChannelVolumeRelativeValue',
+								options: {
+									channel: self.OUTPUT_CHANNELS[i].id,
+									value: '-1.0'
+								}
+							}
+						],
+						up: []
 					}
-				]
+				],
+				feedbacks: []
 			})
 		}
 
 		for (let i = 0; i < self.OUTPUT_CHANNELS.length; i++) {
 			presets.push({
+				type: 'button',
 				category: 'Mute Control',
-				label: `Channel ${self.OUTPUT_CHANNELS[i].id} Mute`,
-				bank: {
-					style: 'text',
+				name: `Channel ${self.OUTPUT_CHANNELS[i].id} Mute`,
+				style: {
 					text: `Mute\\n${self.OUTPUT_CHANNELS[i].id}`,
 					size: '14',
 					color: '16777215',
-					bgcolor: self.rgb(0, 0, 0),
+					bgcolor: combineRgb(0, 0, 0),
 					latch: true
 				},
-				actions: [
+				steps: [
 					{
-						action: 'setOutputChannelMute',
-						options: {
-							channel: self.OUTPUT_CHANNELS[i].id,
-							option: 'true'
-						}
-					}
-				],
-				release_actions: [
-					{
-						action: 'setOutputChannelMute',
-						options: {
-							channel: self.OUTPUT_CHANNELS[i].id,
-							option: 'false'
-						}
+						down: [
+							{
+								actionId: 'setOutputChannelMute',
+								options: {
+									channel: self.OUTPUT_CHANNELS[i].id,
+									option: 'true'
+								}
+							}
+						],
+						up: [
+							{
+								action: 'setOutputChannelMute',
+								options: {
+									channel: self.OUTPUT_CHANNELS[i].id,
+									option: 'false'
+								}
+							}
+						]
 					}
 				],
 				feedbacks: [
 					{
-						type: 'muteState',
+						feedbackId: 'muteState',
 						options: {
 							channel: self.OUTPUT_CHANNELS[i].id,
 							option: 'false',
@@ -108,7 +128,7 @@ module.exports = {
 						}
 					},
 					{
-						type: 'muteState',
+						feedbackId: 'muteState',
 						options: {
 							channel: self.OUTPUT_CHANNELS[i].id,
 							option: 'true',
@@ -122,6 +142,6 @@ module.exports = {
 			})
 		}
 
-		return presets
+		self.setPresetDefinitions(presets);
 	}
 }

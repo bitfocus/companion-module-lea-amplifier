@@ -1,17 +1,16 @@
+const { combineRgb } = require('@companion-module/base')
+
 module.exports = {
-	// ##########################
-	// #### Define Feedbacks ####
-	// ##########################
-	setFeedbacks: function () {
+	initFeedbacks: function () {
 		let self = this
 		let feedbacks = {}
 
-		const foregroundColor = self.rgb(255, 255, 255) // White
-		const backgroundColorRed = self.rgb(255, 0, 0) // Red
+		const foregroundColor = combineRgb(255, 255, 255) // White
+		const backgroundColorRed = combineRgb(255, 0, 0) // Red
 
 		feedbacks.muteState = {
 			type: 'boolean',
-			label: 'Output Channel Mute State',
+			name: 'Output Channel Mute State',
 			description: 'Indicate Output Channel Mute is in X State',
 			style: {
 				color: foregroundColor,
@@ -55,6 +54,6 @@ module.exports = {
 			}
 		}
 
-		return feedbacks
+		self.setFeedbackDefinitions(feedbacks);
 	}
 }

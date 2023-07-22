@@ -1,52 +1,48 @@
 module.exports = {
-	// ##########################
-	// #### Define Variables ####
-	// ##########################
-	setVariables: function () {
+	initVariables: function () {
 		let self = this;
 		let variables = []
 
-		variables.push({ name: 'device_name', label: 'Device Name' });
-		variables.push({ name: 'venue_name', label: 'Venue Name' });
-		variables.push({ name: 'model', label: 'Model' });
-		variables.push({ name: 'serial', label: 'Serial Number' });
-		variables.push({ name: 'firmware', label: 'Firmware Version' });
+		variables.push({ variableId: 'device_name', name: 'Device Name' });
+		variables.push({ variableId: 'venue_name', name: 'Venue Name' });
+		variables.push({ variableId: 'model', name: 'Model' });
+		variables.push({ variableId: 'serial', name: 'Serial Number' });
+		variables.push({ variableId: 'firmware', name: 'Firmware Version' });
 
 		if (self.inputs) {
 			for (let i = 0; i < self.inputs.length; i++) {
-				variables.push({ name: `${self.inputs[i].type.toLowerCase()}_input_${self.inputs[i].id}_name`, label: `${self.inputs[i].type} Input Channel ${self.inputs[i].id} Name` });
+				variables.push({ variableId: `${self.inputs[i].type.toLowerCase()}_input_${self.inputs[i].id}_name`, name: `${self.inputs[i].type} Input Channel ${self.inputs[i].id} Name` });
 			}
 		}
 
 		for (let i = 0; i < self.OUTPUT_CHANNELS.length; i++) {
-			variables.push({ name: `output_${self.OUTPUT_CHANNELS[i].id}_name`, label: `Output Channel ${self.OUTPUT_CHANNELS[i].id} Name` });
-			variables.push({ name: `output_${self.OUTPUT_CHANNELS[i].id}_primary`, label: `Output Channel ${self.OUTPUT_CHANNELS[i].id} Primary Input` });
-			variables.push({ name: `output_${self.OUTPUT_CHANNELS[i].id}_secondary`, label: `Output Channel ${self.OUTPUT_CHANNELS[i].id} Secondary Input` });
-			variables.push({ name: `output_${self.OUTPUT_CHANNELS[i].id}_fader`, label: `Output Channel ${self.OUTPUT_CHANNELS[i].id} Fader Level` });
-			variables.push({ name: `output_${self.OUTPUT_CHANNELS[i].id}_mute`, label: `Output Channel ${self.OUTPUT_CHANNELS[i].id} Mute Status` });
+			variables.push({ variableId: `output_${self.OUTPUT_CHANNELS[i].id}_name`, name: `Output Channel ${self.OUTPUT_CHANNELS[i].id} Name` });
+			variables.push({ variableId: `output_${self.OUTPUT_CHANNELS[i].id}_primary`, name: `Output Channel ${self.OUTPUT_CHANNELS[i].id} Primary Input` });
+			variables.push({ variableId: `output_${self.OUTPUT_CHANNELS[i].id}_secondary`, name: `Output Channel ${self.OUTPUT_CHANNELS[i].id} Secondary Input` });
+			variables.push({ variableId: `output_${self.OUTPUT_CHANNELS[i].id}_fader`, name: `Output Channel ${self.OUTPUT_CHANNELS[i].id} Fader Level` });
+			variables.push({ variableId: `output_${self.OUTPUT_CHANNELS[i].id}_mute`, name: `Output Channel ${self.OUTPUT_CHANNELS[i].id} Mute Status` });
 		}
 
-		return variables
+		self.setVariableDefinitions(variables);
 	},
 
-	// #########################
-	// #### Check Variables ####
-	// #########################
 	checkVariables: function () {
 		let self = this;
 
 		try {
+			let variableObj = {};
+
 			if (self.initialData) {
-				self.setVariable('device_name', self.initialData.deviceName);
-				self.setVariable('venue_name', self.initialData.venueName);
-				self.setVariable('model', self.initialData.modelID);
-				self.setVariable('serial', self.initialData.serialNumber);
-				self.setVariable('firmware', self.initialData.firmwareVersion);
+				variableObj.device_name = self.initialData.deviceName;
+				variableObj.venue_name = self.initialData.venueName;
+				variableObj.model = self.initialData.modelID;
+				variableObj.serial = self.initialData.serialNumber;
+				variableObj.firmware = self.initialData.firmwareVersion;
 			}
 
 			if (self.inputs) {
 				for (let i = 0; i < self.inputs.length; i++) {
-					self.setVariable(`${self.inputs[i].type.toLowerCase()}_input_${self.inputs[i].id}_name`, self.inputs[i].label);
+					variableObj[`${self.inputs[i].type.toLowerCase()}_input_${self.inputs[i].id}_name`] = self.inputs[i].label;
 				}
 			}
 
@@ -72,13 +68,15 @@ module.exports = {
 						muteStatus = (self.ampData[self.OUTPUT_CHANNELS[i].id].output.mute ? 'Muted' : 'Unmuted');
 					}
 
-					self.setVariable(`output_${self.OUTPUT_CHANNELS[i].id}_name`, self.OUTPUT_CHANNELS[i].label);
-					self.setVariable(`output_${self.OUTPUT_CHANNELS[i].id}_primary`, primary);
-					self.setVariable(`output_${self.OUTPUT_CHANNELS[i].id}_secondary`, secondary);
-					self.setVariable(`output_${self.OUTPUT_CHANNELS[i].id}_fader`, faderLevel + ' dB');
-					self.setVariable(`output_${self.OUTPUT_CHANNELS[i].id}_mute`, muteStatus);
+					variableObj[`output_${self.OUTPUT_CHANNELS[i].id}_name`] = self.OUTPUT_CHANNELS[i].label;
+					variableObj[`output_${self.OUTPUT_CHANNELS[i].id}_primary`] = primary;
+					variableObj[`output_${self.OUTPUT_CHANNELS[i].id}_secondary`] = secondary;
+					variableObj[`output_${self.OUTPUT_CHANNELS[i].id}_fader`] = faderLevel + ' dB';
+					variableObj[`output_${self.OUTPUT_CHANNELS[i].id}_mute`] = muteStatus;
 				}
 			}
+
+			self.setVariableValues(variableObj);
 		}
 		catch(error) {
 			self.log('error', 'Error parsing Variables: ' + String(error))

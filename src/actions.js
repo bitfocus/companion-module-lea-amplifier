@@ -1,13 +1,10 @@
 module.exports = {
-	// ##########################
-	// #### Instance Actions ####
-	// ##########################
-	setActions: function () {
-		let self = this
-		let actions = {}
+	initActions: function () {
+		let self = this;
+		let actions = {};
 
 		actions.routePrimaryInputChannelToOutputChannel = {
-			label: 'Route Primary Input Channel to Output Channel',
+			name: 'Route Primary Input Channel to Output Channel',
 			options: [
 				{
 					type: 'dropdown',
@@ -43,7 +40,7 @@ module.exports = {
 		}
 
 		actions.routeSecondaryInputChannelToOutputChannel = {
-			label: 'Route Secondary Input Channel to Output Channel',
+			name: 'Route Secondary Input Channel to Output Channel',
 			options: [
 				{
 					type: 'dropdown',
@@ -79,7 +76,7 @@ module.exports = {
 		}
 
 		actions.setOutputChannelVolumeValue = {
-			label: 'Set Output Channel Volume to Value',
+			name: 'Set Output Channel Volume to Value',
 			options: [
 				{
 					type: 'dropdown',
@@ -95,13 +92,10 @@ module.exports = {
 					default: '0.0',
 				}
 			],
-			callback: function (action, bank) {
+			callback: async function (action, bank) {
 				let opt = action.options;
 
-				let optValue = opt.value;
-				self.parseVariables(optValue, function (value) {
-					optValue = value;
-				});
+				let optValue = await self.parseVariablesInString(opt.value);
 
 				let objChannel = null;
 				
@@ -136,7 +130,7 @@ module.exports = {
 		}
 
 		actions.setOutputChannelVolumeRelativeValue = {
-			label: 'Set Output Channel Volume to Relative Value (+/-)',
+			name: 'Set Output Channel Volume to Relative Value (+/-)',
 			options: [
 				{
 					type: 'dropdown',
@@ -152,13 +146,10 @@ module.exports = {
 					default: '1.0',
 				}
 			],
-			callback: function (action, bank) {
+			callback: async function (action, bank) {
 				let opt = action.options;
 
-				let optValue = opt.value;
-				self.parseVariables(optValue, function (value) {
-					optValue = value;
-				});
+				let optValue = await self.parseVariablesInString(opt.value);
 
 				let objChannel = null;
 				
@@ -197,7 +188,7 @@ module.exports = {
 		}
 
 		actions.setOutputChannelMute = {
-			label: 'Set Output Channel Mute',
+			name: 'Set Output Channel Mute',
 			options: [
 				{
 					type: 'dropdown',
@@ -221,9 +212,6 @@ module.exports = {
 				let opt = action.options;
 
 				let optValue = opt.option;
-				self.parseVariables(optValue, function (value) {
-					optValue = value;
-				});
 
 				let muteValue = (optValue === 'true');
 
@@ -240,6 +228,6 @@ module.exports = {
 			}
 		}
 
-		return actions
+		self.setActionDefinitions(actions);
 	}
 }

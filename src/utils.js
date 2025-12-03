@@ -144,7 +144,7 @@ module.exports = {
 	
 				self.inputs.push(inputObj);
 	
-				if (parseInt(inputNumber) % 2 === 0) {
+				if (parseInt(objKeys[i].toString()) % 2 === 0) {
 					//even number, so create the stereo channel with the previous channel
 					inputNumber = "D" + objKeys[i-1] + '_' + objKeys[i];
 					inputName = 'Dante ' + objKeys[i-1] + '+' + objKeys[i];
@@ -181,7 +181,7 @@ module.exports = {
 	
 				self.inputs.push(inputObj);
 	
-				if (parseInt(inputNumber) % 2 === 0) {
+				if (parseInt(objKeys[i].toString()) % 2 === 0) {
 					//even number, so create the stereo channel with the previous channel
 					inputNumber = objKeys[i-1] + '_' + objKeys[i];
 					inputName = 'Analog ' + objKeys[i-1] + '+' + objKeys[i];

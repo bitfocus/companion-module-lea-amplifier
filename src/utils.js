@@ -126,7 +126,7 @@ module.exports = {
 			let objKeys = Object.keys(data.dante);
 	
 			for (let i = 0; i < objKeys.length; i++) {
-				let inputNumber = objKeys[i].toString();
+				let inputNumber = "D" + objKeys[i].toString();
 				let inputName = 'Dante ' + objKeys[i];
 	
 				let inputChannelObj = {
@@ -146,7 +146,7 @@ module.exports = {
 	
 				if (parseInt(inputNumber) % 2 === 0) {
 					//even number, so create the stereo channel with the previous channel
-					inputNumber = objKeys[i-1] + '_' + objKeys[i];
+					inputNumber = "D" + objKeys[i-1] + '_' + objKeys[i];
 					inputName = 'Dante ' + objKeys[i-1] + '+' + objKeys[i];
 	
 					inputChannelObj = {

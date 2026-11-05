@@ -11,10 +11,10 @@
 		"url": "git+https://github.com/bitfocus/companion-module-lea-amplifier.git"
 	},
 	"dependencies": {
-		"@companion-module/base": "~1.4.1",
+		"@companion-module/base": "~1.15.1",
 		"ws": "^8.21.0"
 	},
 	"devDependencies": {
-		"@companion-module/tools": "^2.8.0"
+		"@companion-module/tools": "^2.9.0"
 	}
 }
